@@ -143,11 +143,19 @@ func (a *API) satisfies(w http.ResponseWriter, r *http.Request) {
 
 // versionView 将 Version 转为 JSON 视图，prerelease/build 永远为数组。
 func versionView(v semver.Version) map[string]any {
+	pre := v.Prerelease
+	if pre == nil {
+		pre = []string{}
+	}
+	build := v.Build
+	if build == nil {
+		build = []string{}
+	}
 	return map[string]any{
 		"major":      v.Major,
 		"minor":      v.Minor,
 		"patch":      v.Patch,
-		"prerelease": v.Prerelease,
-		"build":      v.Build,
+		"prerelease": pre,
+		"build":      build,
 	}
 }
